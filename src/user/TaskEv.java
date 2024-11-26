@@ -30,6 +30,9 @@ public class TaskEv {
         int[] numbers = new int[say];
         int[] number = new int[say];
 
+
+
+
         for (int i = 0; i < say; i++) {
             System.out.print((i + 1) + "-ci ədədin uzunlugunu daxil edin: ");
             number[i] = input.nextInt();

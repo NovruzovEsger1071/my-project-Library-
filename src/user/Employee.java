@@ -26,7 +26,7 @@ public class Employee {
         System.out.println(name.getName());
 
         Employee salary = new Employee();
-        int a = -450;
+        int a = 4450;
         if (a<0){
             a = 0;
         }

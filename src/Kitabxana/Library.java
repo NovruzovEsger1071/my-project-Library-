@@ -1,3 +1,5 @@
+package Kitabxana;
+
 import java.util.List;
 
 public class Library {
@@ -8,6 +10,10 @@ public class Library {
 //    public Library(int capacity) { //100 - 101
 //        this.books = new Book[capacity];
 //        this.bookCount = 0;
+    //istifadecinin istediyi kitab varmi ve varsa qiymetini yoxlamaq.
+//istifadecinin balansinda itdetidi kitaba uygun mebleg varmi.
+//kitaba satila bilen olub olmadiqini ucun filt elave edin(alina bilen ya yox).yeni konustruktor yariladacaq.
+//alindiqdan sonra user balanci yenilemek.(metod).kitab silirik.
 //}
 
     public void addBoook(Book book) {
@@ -56,22 +62,18 @@ public class Library {
     }
 
     public Book findById(int bookId) {
-        for (int i = 0; i < bookCount; i++) {
+        for (Book book: books) {
 
-            Book book = books[i];
-
-            if (bookId == book.getId())
-                return book;
-            throw new BookNotFountException("bu id kitab tapilmadi...");
+            if (bookId != book.getId()){
+                throw new BookNotFountException("bu id kitab tapilmadi...");
+            }
+            return book;
         }
         return null;
     }
 
     public Book findByTitle(String title) {
-        for (int i = 0; i < bookCount; i++) {
-
-            Book book = books[i];
-
+        for (Book book: books) {
             if (title.equalsIgnoreCase(book.getTitle()))
                 return book;
             throw new BookNotFountException("bu adla kitab tapilmadi ...");
@@ -90,10 +92,10 @@ public class Library {
     }
 
     public void borrowBook() {
-        for (int i = 0; i < bookCount; i++) {
-            Book book = findById(i);
-            if (book.getStatus() == Boolean.TRUE) {
-                book.setStatus(false);
+        for (Book book: books) {
+            Book foundedBook = findById(book.getId());
+            if (foundedBook.getStatus() == Boolean.TRUE) {
+                foundedBook.setStatus(false);
                 System.out.println("bu kitab goturldu...");
             } else
                 System.out.println("bu kitab artiq goturule bilmez...");
@@ -111,9 +113,9 @@ public class Library {
     }
 
     public void showBook() {
-        for (int i = 0; i < bookCount; i++) {
-            if (books[i].getStatus() == true) {
-                System.out.println(books[i].getTitle());
+        for (Book book: books) {
+            if (book.getStatus()) {
+                System.out.println(book.getTitle());
             }
         }//10 kitabdan 4 eded true dise array kimi geri qaytar.(return tip array olsun)
 
@@ -121,7 +123,7 @@ public class Library {
 
     public void updatestatus(int bookId) {
         Book findbook = findById(bookId);
-        if (findbook.getStatus() == false) {
+        if (!findbook.getStatus()) {
             findbook.setStatus(true);
             System.out.println("kitab statusu update olundu...");
         }

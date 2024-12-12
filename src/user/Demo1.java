@@ -8,10 +8,12 @@ public class Demo1 {
 
             List<Integer> firstList = new ArrayList<>();
             firstList.add(1);
+            firstList.add(1);
+            firstList.add(9);
             firstList.add(0);
             firstList.add(3);
             firstList.add(3);
-            firstList.add(7);
+            firstList.add(1);
             firstList.add(4);
             firstList.add(5);
 

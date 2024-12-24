@@ -1,9 +1,13 @@
 package Kitabxana;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Library {
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
     private String[] authors;
     private int bookCount;
 
@@ -16,10 +20,15 @@ public class Library {
 //alindiqdan sonra user balanci yenilemek.(metod).kitab silirik.
 //}
 
-    public void addBoook(Book book) {
+    public void addBoook(Book book) throws IOException {
         books.add(book);
         System.out.println("Kitab ugurla elave olundu...");
-//        if (bookCount < books.size()) {
+        FileWriter fileWriter = new FileWriter("output.txt");
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(books.toString());
+        bufferedWriter.close();
+
+        //        if (bookCount < books.size()) {
 //                books[bookCount++] = book;
 //                System.out.println("Kitab elave ugurla olundu...");
 //            }
@@ -30,6 +39,7 @@ public class Library {
 
     public void addBoookCheck(Book book) {
         Book byTitle = findByTitle(book.getTitle());
+        System.out.println(byTitle);
         if (byTitle.getTitle().equals(book.getTitle())) {
             throw new BookAlreadyExistsException("bu adda kitab artiq elave olunub");
         } else {
@@ -62,9 +72,9 @@ public class Library {
     }
 
     public Book findById(int bookId) {
-        for (Book book: books) {
+        for (Book book : books) {
 
-            if (bookId != book.getId()){
+            if (bookId != book.getId()) {
                 throw new BookNotFountException("bu id kitab tapilmadi...");
             }
             return book;
@@ -73,7 +83,7 @@ public class Library {
     }
 
     public Book findByTitle(String title) {
-        for (Book book: books) {
+        for (Book book : books) {
             if (title.equalsIgnoreCase(book.getTitle()))
                 return book;
             throw new BookNotFountException("bu adla kitab tapilmadi ...");
@@ -92,7 +102,7 @@ public class Library {
     }
 
     public void borrowBook() {
-        for (Book book: books) {
+        for (Book book : books) {
             Book foundedBook = findById(book.getId());
             if (foundedBook.getStatus() == Boolean.TRUE) {
                 foundedBook.setStatus(false);
@@ -112,12 +122,16 @@ public class Library {
         }
     }
 
-    public void showBook() {
-        for (Book book: books) {
-            if (book.getStatus()) {
-                System.out.println(book.getTitle());
-            }
-        }//10 kitabdan 4 eded true dise array kimi geri qaytar.(return tip array olsun)
+    public List<Book> showBook() {
+        return books.stream()
+                .filter(checkbook -> checkbook.getStatus().equals(true))
+                .toList();
+
+//        for (Book book: books) {
+//            if (book.getStatus()) {
+//                System.out.println(book.getTitle());
+//            }
+//        }//10 kitabdan 4 eded true dise array kimi geri qaytar.(return tip array olsun)
 
     }
 
@@ -129,6 +143,21 @@ public class Library {
         }
 
     }
+
+    public void checkBalance(int bookId, User user) {
+        Book byId = findById(bookId);
+        if (byId != null) {
+            if (byId.getPrice() <= user.getBalance()) {
+                user.setBalance(user.getBalance() - byId.getPrice());
+                byId.setStatus(false);
+                System.out.println(user.getBalance());
+            }
+            System.out.println("Balansinizda kifayet qeder mebleg yoxdu");
+        }
+        System.out.println("Bele kitab yoxdu");
+
+    }
+
 }
 //metodlari duzeldirik.
 //harda void return ederik.
